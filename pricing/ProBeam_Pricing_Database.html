@@ -78,6 +78,9 @@ td.num{text-align:right;font-variant-numeric:tabular-nums}
 .chip{display:inline-block;font-size:10px;padding:2px 7px;border-radius:20px;background:var(--accent-soft);color:var(--accent);white-space:nowrap}
 .specs{color:var(--muted);font-size:12px;max-width:230px}
 .specs b{color:var(--fg);font-weight:600}
+.dsbtn{display:inline-block;margin-left:6px;font-size:10px;font-weight:600;padding:2px 7px;border-radius:6px;border:1px solid var(--line);background:var(--surface-2);color:var(--accent);text-decoration:none;white-space:nowrap;vertical-align:middle}
+.dsbtn:hover{border-color:var(--accent)}
+.nods{margin-left:6px;font-size:10px;color:var(--faint);white-space:nowrap;vertical-align:middle}
 .vbtn{font-size:11px;padding:3px 8px;border-radius:14px;background:var(--surface-2)}
 .pinput{width:84px;border:1px solid var(--line);border-radius:7px;padding:6px 8px;background:var(--bg);color:var(--fg);font:inherit;text-align:right;font-variant-numeric:tabular-nums}
 .pinput:focus{border-color:var(--accent)}
@@ -118,7 +121,7 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
 <main class="wrap">
   <div class="tiles" id="tiles"></div>
 
-  <div class="note">Source: 3A Lighting Product Catalogue 2025–26. Prices you enter are saved in this browser only — use <b>Copy CSV</b> to take them out. All figures ex-GST. <a href="https://www.dropbox.com/t/LifBZLUlMj1xicPG" target="_blank" rel="noopener">Data sheet</a></div>
+  <div class="note">Source: 3A Lighting Product Catalogue 2025–26. Prices you enter are saved in this browser only — use <b>Copy CSV</b> to take them out. All figures ex-GST. <a href="https://www.dropbox.com/t/LifBZLUlMj1xicPG" target="_blank" rel="noopener">Data sheet</a> · <a href="https://www.dropbox.com/scl/fo/js0e4p8nssman5fc4n1bs/ANamqRY6ONmmC2M59NhBOn4?rlkey=wy2t8ew2hzphn0z4m4kfpuywm&amp;dl=1" rel="noopener">Download all data sheets (ZIP)</a></div>
 
   <div class="toolbar">
     <input type="search" id="q" placeholder="Search PBL code, 3A code, barcode, specs…" aria-label="Search">
@@ -171,6 +174,8 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
   "use strict";
   var PRODUCTS = JSON.parse(document.getElementById('data').textContent);
   var KEY = 'pbl_pricing_v1';
+  var DS_BASE = 'https://github.com/sporter93/Probeam/raw/main/datasheets/';
+  var DS = {"PBL-BT-002":["pdf"],"PBL-BT-003":["pdf","docx"],"PBL-BT-005":["pdf"],"PBL-BT-007":["pdf"],"PBL-BT-008":["pdf"],"PBL-BT-009":["pdf"],"PBL-BT-012":["pdf"],"PBL-BT-013":["pdf","docx"],"PBL-BT-018":["pdf"],"PBL-BT-019":["pdf"],"PBL-BT-020":["pdf"],"PBL-BT-021":["pdf"],"PBL-BT-023":["pdf"],"PBL-BT-024":["pdf"],"PBL-BT-025":["pdf"],"PBL-CF-001":["pdf"],"PBL-CF-002":["pdf"],"PBL-CF-003":["pdf"],"PBL-CF-004":["pdf"],"PBL-CL-001":["pdf"],"PBL-CL-002":["pdf"],"PBL-CL-004":["pdf"],"PBL-CL-006":["pdf"],"PBL-CL-007":["pdf"],"PBL-DL-008":["pdf","docx"],"PBL-DL-010":["pdf","docx"],"PBL-DL-018":["pdf"],"PBL-DL-020":["pdf","docx"],"PBL-DL-024":["pdf","docx"],"PBL-DL-028":["pdf"],"PBL-DL-031":["pdf"],"PBL-DL-032":["pdf","docx"],"PBL-DL-033":["pdf"],"PBL-DL-039":["pdf","docx"],"PBL-DL-050":["pdf","docx"],"PBL-DL-051":["pdf","docx"],"PBL-DL-055":["pdf","docx"],"PBL-DL-060":["pdf"],"PBL-DL-061":["pdf","docx"],"PBL-DL-069":["pdf"],"PBL-DL-071":["pdf","docx"],"PBL-DL-074":["pdf"],"PBL-DL-075":["pdf"],"PBL-DL-084":["pdf","docx"],"PBL-EM-001":["pdf"],"PBL-EM-002":["pdf"],"PBL-EM-003":["pdf"],"PBL-EM-006":["pdf","docx"],"PBL-EM-008":["pdf"],"PBL-FH-001":["pdf","docx"],"PBL-FH-003":["pdf"],"PBL-FH-005":["pdf","docx"],"PBL-FH-006":["pdf"],"PBL-GL-006":["pdf"],"PBL-GL-011":["pdf"],"PBL-GL-012":["pdf"],"PBL-GL-013":["pdf"],"PBL-GL-014":["pdf"],"PBL-HB-001":["pdf"],"PBL-MG-002":["pdf","docx"],"PBL-MG-005":["pdf"],"PBL-MG-006":["pdf","docx"],"PBL-MG-009":["pdf"],"PBL-MG-011":["pdf"],"PBL-MG-012":["pdf","docx"],"PBL-NE-001":["pdf"],"PBL-OD-001":["pdf"],"PBL-OD-002":["pdf"],"PBL-OD-003":["pdf","docx"],"PBL-OD-004":["pdf"],"PBL-OD-006":["pdf"],"PBL-OD-007":["pdf"],"PBL-OD-008":["pdf"],"PBL-OD-009":["pdf"],"PBL-OD-010":["pdf"],"PBL-OD-016":["pdf"],"PBL-OD-017":["pdf"],"PBL-OD-018":["pdf"],"PBL-OD-019":["pdf"],"PBL-OD-020":["pdf","docx"],"PBL-OD-021":["pdf"],"PBL-OD-023":["pdf"],"PBL-OD-028":["pdf","docx"],"PBL-OD-029":["pdf"],"PBL-OD-030":["pdf"],"PBL-OD-031":["pdf"],"PBL-OD-033":["pdf"],"PBL-OD-034":["pdf"],"PBL-OD-035":["pdf"],"PBL-OD-036":["pdf"],"PBL-OD-037":["pdf"],"PBL-OD-038":["pdf"],"PBL-OD-039":["pdf"],"PBL-OD-040":["pdf"],"PBL-OD-041":["pdf"],"PBL-OD-044":["pdf"],"PBL-OD-045":["pdf"],"PBL-OD-046":["pdf"],"PBL-OD-047":["pdf"],"PBL-OD-048":["pdf"],"PBL-OD-049":["pdf"],"PBL-OD-050":["pdf"],"PBL-OD-051":["pdf"],"PBL-OD-052":["pdf"],"PBL-OD-055":["pdf"],"PBL-OD-056":["pdf"],"PBL-OD-058":["pdf"],"PBL-OD-061":["pdf"],"PBL-OD-064":["pdf"],"PBL-OD-066":["pdf"],"PBL-OD-067":["pdf"],"PBL-OD-068":["pdf","docx"],"PBL-OD-070":["pdf"],"PBL-OD-071":["pdf"],"PBL-OD-072":["pdf"],"PBL-OD-073":["pdf"],"PBL-OD-074":["pdf"],"PBL-OD-075":["pdf"],"PBL-OD-078":["pdf"],"PBL-OD-079":["pdf"],"PBL-OD-087":["pdf"],"PBL-OD-094":["pdf"],"PBL-OD-095":["pdf"],"PBL-OD-097":["pdf"],"PBL-OD-098":["pdf"],"PBL-OD-099":["pdf"],"PBL-OD-102":["pdf"],"PBL-OD-103":["pdf","docx"],"PBL-OD-104":["pdf"],"PBL-OD-109":["pdf","docx"],"PBL-OD-110":["pdf"],"PBL-OD-111":["pdf","docx"],"PBL-OD-112":["pdf"],"PBL-OD-113":["pdf"],"PBL-OD-119":["pdf"],"PBL-PD-001":["pdf"],"PBL-PN-003":["pdf"],"PBL-PN-004":["pdf"],"PBL-PN-009":["pdf","docx"],"PBL-SE-006":["pdf"],"PBL-SE-008":["pdf"],"PBL-SE-009":["pdf"],"PBL-SE-010":["pdf"],"PBL-SE-011":["pdf"],"PBL-SM-001":["pdf"],"PBL-SM-002":["pdf"],"PBL-SM-006":["pdf","docx"],"PBL-SM-007":["pdf"],"PBL-SM-011":["pdf"],"PBL-SP-001":["pdf"],"PBL-SP-008":["pdf","docx"],"PBL-SP-009":["pdf","docx"],"PBL-ST-001":["pdf"],"PBL-ST-002":["pdf"],"PBL-ST-003":["pdf"],"PBL-TK-002":["pdf"],"PBL-TK-007":["pdf","docx"],"PBL-TK-010":["pdf"],"PBL-TK-011":["pdf"],"PBL-TK-013":["pdf"],"PBL-TK-017":["pdf"],"PBL-TK-018":["pdf"],"PBL-TK-019":["pdf","docx"],"PBL-TK-021":["pdf","docx"],"PBL-TK-022":["pdf"],"PBL-TK-023":["pdf"],"PBL-TK-025":["pdf","docx"],"PBL-TK-026":["pdf"]};
   var prices = {};
   try { prices = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch(e){ prices = {}; }
   var saveT;
@@ -229,7 +234,7 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
     var ph = p.th ? '<img class="thumb" src="'+p.th+'" loading="lazy" alt="'+esc(p.b)+'">' : '<span style="color:var(--faint);font-size:11px">—</span>';
     return '<tr class="prow" data-b="'+p.b+'">'
       +'<td class="photocell">'+ph+'</td>'
-      +'<td><span class="code">'+esc(p.b)+'</span></td>'
+      +'<td><span class="code">'+esc(p.b)+'</span>'+dsHTML(p.b)+'</td>'
       +'<td><span class="code3a">'+esc(p.a)+'</span></td>'
       +'<td><span class="chip">'+esc(p.cat)+'</span></td>'
       +'<td class="specs">'+specbits.join(' · ')+'</td>'
@@ -240,6 +245,14 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
       +'<td class="num kcell"><span class="pct '+(isFinite(k.markup)?(k.markup<0?'b':'n'):'n')+'">'+(isFinite(k.markup)?fmt(k.markup,0)+'%':'—')+'</span></td>'
       +'<td class="num pcell tnum">'+(isFinite(k.profit)?fmt(k.profit,2):'—')+'</td>'
       +'</tr>';
+  }
+  function dsHTML(b){
+    var f=DS[b];
+    if(!f||!f.length) return ' <span class="nods">no sheet</span>';
+    return f.map(function(ext){
+      var u=DS_BASE+b+'/ProBeam_'+b+'_Datasheet.'+ext;
+      return ' <a class="dsbtn" href="'+u+'" target="_blank" rel="noopener" title="Download '+b+' data sheet ('+ext.toUpperCase()+')">'+ext.toUpperCase()+' ↓</a>';
+    }).join('');
   }
   function esc(s){ return (s==null?'':''+s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
 
